@@ -14,6 +14,11 @@ func main() {
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
+		"map": {
+			name: "map",
+			description: "Displays next 20 locations",
+			callback: 
+		}
 		"help": {
 			name: "help",
 			description: "Displays a help message",
