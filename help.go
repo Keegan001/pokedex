@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func displayHelp() error {
+func displayHelp(*config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println("help: Displays a help message")

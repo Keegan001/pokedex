@@ -4,5 +4,11 @@ package main
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
+	conf *config
+}
+
+type config struct {
+	nextUrl string
+	prevUrl string
 }
