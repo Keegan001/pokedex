@@ -2,39 +2,25 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"encoding/json"
-)
 
-type mapAreas struct {
-	Count    int    `json:"count"`
-	Next     string `json:"next"`
-	Previous any    `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"results"`
-}
+	"github.com/Keegan001/pokedex/internal/pokeapi"
+)
 
 func getAreasBack(cfg *config) error {
 	if cfg.prevUrl == "" {
 		fmt.Println("you're on the first page")
 		return nil
 	}
-	res, err := http.Get(cfg.prevUrl)
+
+	areas, err := pokeapi.GetLocationAreas(cfg.prevUrl)
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
-	areas := mapAreas{}
-	decoder := json.NewDecoder(res.Body)
-    err = decoder.Decode(&areas)
-    if err != nil {
-        return err
-    }
+
 	for _, area := range areas.Results {
 		fmt.Println(area.Name)
 	}
+
 	cfg.nextUrl = areas.Next
 	if areas.Previous != nil {
 		// This is the "Type Assertion"
@@ -45,24 +31,19 @@ func getAreasBack(cfg *config) error {
 		// If it's null, we are on the first page
 		cfg.prevUrl = ""
 	}
-	return nil 
+	return nil
 }
 
 func getAreas(cfg *config) error {
-	res, err := http.Get(cfg.nextUrl)
+	areas, err := pokeapi.GetLocationAreas(cfg.nextUrl)
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
-	areas := mapAreas{}
-	decoder := json.NewDecoder(res.Body)
-    err = decoder.Decode(&areas)
-    if err != nil {
-        return err
-    }
+
 	for _, area := range areas.Results {
 		fmt.Println(area.Name)
 	}
+
 	cfg.nextUrl = areas.Next
 	if areas.Previous != nil {
 		// This is the "Type Assertion"
@@ -73,5 +54,5 @@ func getAreas(cfg *config) error {
 		// If it's null, we are on the first page
 		cfg.prevUrl = ""
 	}
-	return nil 
+	return nil
 }

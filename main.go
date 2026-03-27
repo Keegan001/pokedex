@@ -1,45 +1,45 @@
 package main
 
-import ( 
-	"fmt"
+import (
 	"bufio"
+	"fmt"
 	"os"
 	"strings"
 )
 
 func main() {
 	sharedConf := &config{
-				nextUrl:"https://pokeapi.co/api/v2/location-area/?offset=0&limit=20",
-				prevUrl:"",
-			}
+		nextUrl: "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20",
+		prevUrl: "",
+	}
 	mp := map[string]cliCommand{
 		"exit": {
 			name:        "exit",
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 			conf: &config{
-				nextUrl:"",
+				nextUrl: "",
 				prevUrl: "",
 			},
 		},
 		"map": {
-			name: "map",
+			name:        "map",
 			description: "Displays next 20 locations",
-			callback: getAreas,
-			conf: sharedConf,
+			callback:    getAreas,
+			conf:        sharedConf,
 		},
 		"mapb": {
-			name: "mapb",
+			name:        "mapb",
 			description: "Displays previous 20 locations",
-			callback: getAreasBack,
-			conf: sharedConf,
+			callback:    getAreasBack,
+			conf:        sharedConf,
 		},
 		"help": {
-			name: "help",
+			name:        "help",
 			description: "Displays a help message",
-			callback: displayHelp,
+			callback:    displayHelp,
 			conf: &config{
-				nextUrl:"",
+				nextUrl: "",
 				prevUrl: "",
 			},
 		},
@@ -50,7 +50,7 @@ func main() {
 		scanner.Scan()
 		input := scanner.Text()
 		cleanSlice := cleanInput(input)
-		val, err := mp[strings.ToLower(cleanSlice[0])] 
+		val, err := mp[strings.ToLower(cleanSlice[0])]
 		if err == true {
 			val.callback(val.conf)
 		} else {
@@ -58,4 +58,3 @@ func main() {
 		}
 	}
 }
-
